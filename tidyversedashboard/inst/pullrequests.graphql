@@ -1,0 +1,38 @@
+query pullRequest($org:String!, $privacy: RepositoryPrivacy, $cursor:String) {
+  repositoryOwner(login: $org) {
+    repositories(first:20, affiliations: OWNER, isFork: false, privacy: $privacy, after: $cursor) {
+      nodes {
+        name
+        pullRequests(first: 25, orderBy: {field: UPDATED_AT, direction: DESC}) {
+          nodes {
+            number
+            createdAt
+            updatedAt
+            author {
+              login
+            }
+            reviews(first:10) {
+              nodes{
+                author{
+                  login
+                }
+                submittedAt
+              }
+            }
+            comments(first:100){
+              nodes{
+                author {
+                  login
+                }
+                publishedAt
+              }
+            }
+          }
+        }
+      }
+      pageInfo {
+        endCursor
+      }
+    }
+  }
+}
